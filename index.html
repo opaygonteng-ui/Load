@@ -3,20 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>System Error</title>
+<title>ANDROID CRITICAL FAILURE</title>
 
 <style>
 body{
     margin:0;
-    background:#111;
-    color:white;
-    font-family:Arial, sans-serif;
-    text-align:center;
+    background:black;
+    color:red;
+    font-family:monospace;
     overflow:hidden;
+    text-align:center;
+    transition:0.1s;
 }
 
-#box{
-    margin-top:150px;
+#topbar{
+    position:fixed;
+    top:0;
+    width:100%;
+    background:#111;
+    color:white;
+    padding:5px;
+    font-size:14px;
+}
+
+#main{
+    margin-top:120px;
 }
 
 button{
@@ -31,40 +42,103 @@ button{
 
 .popup{
     position:fixed;
-    top:20%;
-    left:50%;
-    transform:translateX(-50%);
     background:white;
     color:black;
-    padding:20px;
+    padding:15px;
     border-radius:10px;
-    display:none;
+    font-size:14px;
 }
+
+.glitch{
+    animation: glitch 0.1s infinite alternate;
+}
+
+@keyframes glitch{
+    from{background:black;}
+    to{background:#300;}
+}
+
 </style>
 </head>
 
-<body onclick="startPrank()">
+<body onclick="startKiamat()">
 
-<div id="box">
-<h2>⚠️ ERROR SISTEM ANDROID</h2>
-<p>Aplikasi tidak merespon</p>
+<div id="topbar">
+📶 Tidak ada layanan | 🔋 1%
 </div>
 
-<button id="btn">TUTUP APLIKASI</button>
-
-<div class="popup" id="popup">
-<p>❌ Sistem gagal menutup aplikasi</p>
+<div id="main">
+<h2>⚠️ ANDROID SYSTEM MELTDOWN</h2>
+<p id="count">Reset perangkat dalam 10 detik...</p>
 </div>
+<button id="btn">BATALKAN RESET</button>
+
+<audio id="alarm" src="wrong.mp3"></audio>
 
 <script>
 
 let btn = document.getElementById("btn");
-let popup = document.getElementById("popup");
+let countText = document.getElementById("count");
+let alarm = document.getElementById("alarm");
 
-function startPrank(){
+let time = 10;
+let started = false;
+
+function startKiamat(){
+    if(started) return;
+    started = true;
+
     document.documentElement.requestFullscreen();
-}
+    navigator.vibrate([300,200,300]);
 
+    document.body.classList.add("glitch");
+
+    alarm.loop = true;
+    alarm.play();
+
+    // Countdown palsu
+    setInterval(()=>{
+        if(time <= 1){
+            time = 10;
+        } else {
+            time--;
+        }
+        countText.innerHTML = "Reset perangkat dalam " + time + " detik...";
+    },1000);
+
+    // Popup spam
+    setInterval(()=>{
+        let popup = document.createElement("div");
+        popup.className = "popup";
+        popup.innerHTML = "❌ SYSTEM ERROR";
+        popup.style.left = Math.random() * (window.innerWidth - 150) + "px";
+        popup.style.top = Math.random() * (window.innerHeight - 80) + "px";
+        document.body.appendChild(popup);
+
+        navigator.vibrate(100);
+
+        setTimeout(()=>{
+            popup.remove();
+        },1500);
+    },700);
+
+    // Ending setelah 15 detik
+    setTimeout(()=>{
+    alarm.pause();
+    document.body.classList.remove("glitch");
+    document.body.style.background="#111";
+
+    document.body.innerHTML = `
+        <div style="margin-top:80px;text-align:center;color:white;">
+            <h1>😂 INI HANYA PRANK!</h1>
+            <img src="saya.png" style="width:250px;border-radius:15px;margin-top:20px;">
+            <p style="margin-top:15px;font-size:18px;">Kena kamu 😈</p>
+            <p style="margin-top:15px;font-size:8px;">tekan back berkali kali</p>
+        </div>
+    `;
+},15000);
+}
+// Tombol kabur
 btn.addEventListener("touchstart", moveButton);
 btn.addEventListener("mouseover", moveButton);
 
@@ -73,13 +147,7 @@ function moveButton(){
     let y = Math.random() * (window.innerHeight - 60);
     btn.style.left = x + "px";
     btn.style.top = y + "px";
-
-    popup.style.display="block";
-    navigator.vibrate(200);
-
-    setTimeout(()=>{
-        popup.style.display="none";
-    },1000);
+    navigator.vibrate(150);
 }
 
 </script>
